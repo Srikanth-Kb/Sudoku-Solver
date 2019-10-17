@@ -11,6 +11,7 @@ def find_max_area_contour(contours):
     area = -1
     for i in range(len(contours)):
         if cv2.contourArea(contours[i]) > area:
+            area = cv2.contourArea(contours[i])
             index = i
     return index
 
@@ -38,9 +39,16 @@ def warp_coord(pts1):
 def find_numbered_squares(squares):
     numbered_squares = list()
     for i in range(81):
-        if np.var(numbered_images[i][10:23, 10:23]) > 10000:
+        if np.var(squares[i][10:23, 10:23]) > 10000:
             numbered_squares.append(i)
     return numbered_squares
+
+def show_sudoku(squares,numbered_squares):
+    for i in range(81):
+        if i in numbered_squares:
+            plt.subplot(9,9,i+1), plt.imshow(squares[i], cmap='gray')
+    plt.show()
+
 
 def preprocessing_image(image):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -65,16 +73,13 @@ def preprocessing_image(image):
 
     epsilon = 0.1*cv2.arcLength(contours[index], True)
     approx = cv2.approxPolyDP(contours[index], epsilon, True)
-
     pts1 = np.float32(approx.reshape(4,2))
     pts2 = warp_coord(pts1)
 
     M = cv2.getPerspectiveTransform(pts1, pts2)
     dst = cv2.warpPerspective(dilated_image, M, (297,297))
 
-    plt.imshow(dilated_image)
-    plt.show()
-    '''
+    
     x_size, y_size = 33,33
     squares = []
     for y in range(1,10):
@@ -82,16 +87,49 @@ def preprocessing_image(image):
             squares.append(dst[(y-1)*y_size:y*y_size, (x-1)*x_size:x*x_size])
     
     numbered_squares = find_numbered_squares(squares)
-    '''
 
+    input_shape = (28,28,1)
+    num_classes = 10
+    model = Sequential()
+    model.add(Conv2D(32, kernel_size=(3, 3),
+                    activation='relu',
+                    input_shape=input_shape))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(num_classes, activation='softmax'))
 
+    model.compile(loss=keras.losses.categorical_crossentropy,
+                optimizer=keras.optimizers.Adadelta(),
+                metrics=['accuracy'])
+    
+
+    model = load_model('mnist_model.h5')
+
+    my_dict = {}
+    for index in numbered_squares:
+        buff = squares[index][3:30,3:30]
+        buff = cv2.resize(buff, (28,28))
+        buff = buff.reshape(1,28,28,1)
+        label = model.predict_classes(buff)
+        my_dict[index] = label[0]
+        #print('Block number:',index, '\t','Predicted number:',label)
+        plt.subplot(9,9,index+1), plt.imshow(squares[index][3:30,3:30],cmap='gray')
+        plt.title(label)
+
+    sudoku = ['0' for i in range(81)]
+    for key, value in my_dict.items():
+        sudoku[key] = str(value)
+    grid1 = ''.join(sudoku)
+
+    answer = solve(grid1)
+    answers = list(answer.items())
+    print(answers)
 
 
 
 image = cv2.imread('sudoku.jpg')
 preprocessing_image(image)
-    
-
-
-
-
