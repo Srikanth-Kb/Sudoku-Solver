@@ -124,22 +124,16 @@ def create_string(detected_numbers_dictionary):
 
 def write_to_image(image, item):
     row = item[0][0]
-    ##print('Row:',row)
     column = item[0][1]
-    #print('Column:',column)
     value = item[1]
-    #print('Value:',value)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    #cv2.putText(image, value, (9+33*(int(column)-1), 25+33*(ord(row)-65)), font, 0.7, (0,255,0),2, cv2.LINE_AA)
-    #cv2.imshow('',image)
-    #cv2.waitKey()
+    cv2.putText(image, value, (9+33*(int(column)-1), 25+33*(ord(row)-65)), font, 0.7, (0,255,0),2, cv2.LINE_AA)
     return image
 
 def write_answers_on_image(grid1, image, answers):
     for i in range(81):
         if grid1[i]=='0' or grid1[i]=='.':
             frame = write_to_image(image, answers[i] )
-    #plt.imshow(frame)
     return frame
 
 def inverse_perspective(answer_image, approx, image):
@@ -147,6 +141,6 @@ def inverse_perspective(answer_image, approx, image):
         pts2 = warp_coord(pts1)
 
         N = cv2.getPerspectiveTransform(pts2, pts1)
-        dst = cv2.warpPerspective(image, N, image.shape[1::-1])
+        dst = cv2.warpPerspective(answer_image, N, image.shape[1::-1])
 
         return dst
