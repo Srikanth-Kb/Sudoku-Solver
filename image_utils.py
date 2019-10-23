@@ -1,6 +1,7 @@
 import cv2 
 import numpy as np
-import keras 
+import keras
+import matplotlib.pyplot as plt
 from keras.models import Sequential, load_model
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
@@ -20,17 +21,17 @@ def warp_coord(pts1):
     for i in range(len(pts1)):
         if pts1[i][0] < ref:
             if pts1[i][1] < ref:
-                print('Top left coordinate:',pts1[i])
+                #print('Top left coordinate:',pts1[i])
                 pts2[i] = [0 , 0]
             elif pts1[i][1] > ref:
-                print('Bottom left coordinate:',pts1[i])
+               # print('Bottom left coordinate:',pts1[i])
                 pts2[i] = [0, 297]
         elif pts1[i][0] > ref:
             if pts1[i][1] < ref:
-                print('Top right coordinate:',pts1[i])
+                #print('Top right coordinate:',pts1[i])
                 pts2[i] = [297, 0]
             elif pts1[i][1] > ref:
-                print('Bottom right coordinate:',pts1[i])
+                #print('Bottom right coordinate:',pts1[i])
                 pts2[i] = [297, 297]
     return np.float32(pts2)
 
@@ -123,16 +124,22 @@ def create_string(detected_numbers_dictionary):
 
 def write_to_image(image, item):
     row = item[0][0]
+    ##print('Row:',row)
     column = item[0][1]
+    #print('Column:',column)
     value = item[1]
+    #print('Value:',value)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    cv2.putText(image, value, (9+33*(int(column)-1), 25+33*(ord(row)-65)), font, 0.7, (0,255,0),2, cv2.LINE_AA)
+    #cv2.putText(image, value, (9+33*(int(column)-1), 25+33*(ord(row)-65)), font, 0.7, (0,255,0),2, cv2.LINE_AA)
+    #cv2.imshow('',image)
+    #cv2.waitKey()
     return image
 
 def write_answers_on_image(grid1, image, answers):
     for i in range(81):
         if grid1[i]=='0' or grid1[i]=='.':
             frame = write_to_image(image, answers[i] )
+    #plt.imshow(frame)
     return frame
 
 def inverse_perspective(answer_image, approx, image):
