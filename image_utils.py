@@ -56,13 +56,16 @@ def find_sudoku_border(image):
         return approx
 
 def align_sudoku(image, approx):
-        pts1 = np.float32(approx.reshape(4,2))
-        pts2 = warp_coord(pts1)
+        try:
+            pts1 = np.float32(approx.reshape(4,2))
+            pts2 = warp_coord(pts1)
 
-        M = cv2.getPerspectiveTransform(pts1, pts2)
-        dst = cv2.warpPerspective(image, M, (297,297))
-
-        return dst
+            M = cv2.getPerspectiveTransform(pts1, pts2)
+            dst = cv2.warpPerspective(image, M, (297,297))
+        except:
+            return image
+        else:
+            return dst
 
 def obtain_squares_list(image):
         x_size, y_size = 33,33

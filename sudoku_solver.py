@@ -10,6 +10,8 @@ from image_utils import *
 
 image = cv2.imread('1.jpg')
 
+model = create_model()
+
 dilated_image = preprocessing_image(image)
 
 approx = find_sudoku_border(dilated_image)
@@ -19,8 +21,6 @@ aligned_image = align_sudoku(dilated_image, approx)
 square_images_list = obtain_squares_list(aligned_image)
 
 numbered_squares_list = detect_numbers(square_images_list)
-
-model = create_model()
 
 digits_dict = predict_digits(square_images_list, numbered_squares_list, model)
 
@@ -40,6 +40,4 @@ final_answered_image = cv2.addWeighted(image, 0.5, aligned_answered_image, 0.5, 
 plt.imshow(final_answered_image,cmap='gray')
 plt.show()
 
-
-
-
+    
