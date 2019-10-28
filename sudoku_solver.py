@@ -39,5 +39,3 @@ final_answered_image = cv2.addWeighted(image, 0.5, aligned_answered_image, 0.5, 
 
 plt.imshow(final_answered_image,cmap='gray')
 plt.show()
-
-    
