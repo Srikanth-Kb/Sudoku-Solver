@@ -39,10 +39,12 @@ while True:
 
         aligned_answered_image = inverse_perspective(answered_image, approx, frame)
 
-        final_answered_image = cv2.addWeighted(frame, 0.5, aligned_answered_image, 0.5, 0.5)
+        final_answered_image = cv2.addWeighted(frame, 0.5, aligned_answered_image, 0.5, 0)
 
         cv2.imshow('Solved Image', final_answered_image)
 
+    else:
+        cv2.imshow('Solved Image',frame)
     if cv2.waitKey(1) and 0xFF==ord('q'):
         break
 
