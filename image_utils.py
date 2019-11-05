@@ -140,10 +140,10 @@ def write_answers_on_image(grid1, image, answers):
     return frame
 
 def inverse_perspective(answer_image, approx, image):
-        pts1 = np.float32(approx.reshape(4,2))
-        pts2 = warp_coord(pts1)
+    pts1 = np.float32(approx.reshape(4,2))
+    pts2 = warp_coord(pts1)
 
-        N = cv2.getPerspectiveTransform(pts2, pts1)
-        dst = cv2.warpPerspective(answer_image, N, image.shape[1::-1])
+    N = cv2.getPerspectiveTransform(pts2, pts1)
+    dst = cv2.warpPerspective(answer_image, N, image.shape[1::-1])
 
-        return dst
+    return dst
