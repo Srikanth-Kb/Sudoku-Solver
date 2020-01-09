@@ -30,4 +30,4 @@ Run the following file for webcam implementation of the system.
 ```
 python3 webcam.py
 ```
-![Farmers Market Finder Demo](ScreenCapture_29-12-2019-14.03.42(1).gif)
+![Farmers Market Finder Demo](ScreenCapture_10-01-2020-00.13.42_Trim.gif)
