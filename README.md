@@ -4,7 +4,8 @@ Implementing Augmented Reality based Sudoku Solver, that uses OpenCV-Python to d
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes: <br/>
+1. Clone the project with link: https://github.com/Srikanth-Kb/Sudoku-Solver.git
 
 ### Prerequisites
 
